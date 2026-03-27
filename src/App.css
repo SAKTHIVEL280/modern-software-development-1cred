@@ -33,6 +33,24 @@
   animation: riseIn 540ms ease;
 }
 
+.skip-link {
+  position: absolute;
+  inset-inline-start: 16px;
+  inset-block-start: -120px;
+  z-index: 5;
+  border: 1px solid #144f4f;
+  border-radius: 10px;
+  background: #f8fff8;
+  color: #0f3534;
+  padding: 10px 14px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.skip-link:focus-visible {
+  inset-block-start: 14px;
+}
+
 .todo-header {
   margin-bottom: 20px;
 }
@@ -85,6 +103,13 @@ h1 {
 .composer button:hover {
   transform: translateY(-1px);
   filter: brightness(1.05);
+}
+
+button:focus-visible,
+input:focus-visible,
+.todo-item input[type='checkbox']:focus-visible {
+  outline: 3px solid #e48638;
+  outline-offset: 2px;
 }
 
 .controls {

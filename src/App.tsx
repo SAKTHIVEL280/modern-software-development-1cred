@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import {
   createTodo,
@@ -19,6 +19,9 @@ export type Todo = {
 export type Filter = 'all' | 'active' | 'completed'
 
 function App() {
+  const appName = import.meta.env.VITE_APP_NAME?.trim() || 'Todo Atelier'
+  const appVersion = import.meta.env.VITE_APP_VERSION?.trim()
+  const inputRef = useRef<HTMLInputElement>(null)
   const [tasks, setTasks] = useState<Todo[]>(() => readTodos())
   const [inputValue, setInputValue] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
@@ -43,6 +46,7 @@ function App() {
 
     setTasks((prev) => [createTodo(trimmed), ...prev])
     setInputValue('')
+    inputRef.current?.focus()
   }
 
   const toggleTask = (id: number) => {
@@ -64,10 +68,13 @@ function App() {
   return (
     <div className="page">
       <div className="grain" aria-hidden="true"></div>
-      <main className="todo-shell">
+      <a className="skip-link" href="#main-content">
+        Skip to task board
+      </a>
+      <main className="todo-shell" id="main-content" tabIndex={-1}>
         <header className="todo-header">
           <p className="kicker">Plan with intent</p>
-          <h1>Todo Atelier</h1>
+          <h1>{appName}</h1>
           <p className="subtitle">
             Keep your day sharp with a focused, lightweight task board.
           </p>
@@ -78,6 +85,7 @@ function App() {
             New task
           </label>
           <input
+            ref={inputRef}
             id="todo-input"
             type="text"
             value={inputValue}
@@ -95,6 +103,8 @@ function App() {
           <div className="filters" role="tablist" aria-label="Filters">
             <button
               type="button"
+              role="tab"
+              aria-selected={filter === 'all'}
               className={filter === 'all' ? 'is-active' : ''}
               onClick={() => setFilter('all')}
             >
@@ -102,6 +112,8 @@ function App() {
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={filter === 'active'}
               className={filter === 'active' ? 'is-active' : ''}
               onClick={() => setFilter('active')}
             >
@@ -109,6 +121,8 @@ function App() {
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={filter === 'completed'}
               className={filter === 'completed' ? 'is-active' : ''}
               onClick={() => setFilter('completed')}
             >
@@ -158,6 +172,7 @@ function App() {
 
         <footer className="footnote">
           {tasks.length} total task{tasks.length === 1 ? '' : 's'}
+          {appVersion ? ` · v${appVersion}` : ''}
         </footer>
       </main>
     </div>
