@@ -1,62 +1,37 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
+import {
+  createTodo,
+  getActiveCount,
+  getCompletedCount,
+  readTodos,
+  toVisibleTodos,
+  writeTodos,
+} from './lib/todoStorage'
 import './App.css'
 
-type Todo = {
+export type Todo = {
   id: number
   text: string
   completed: boolean
 }
 
-type Filter = 'all' | 'active' | 'completed'
-
-const STORAGE_KEY = 'todo-react-ts-items'
+export type Filter = 'all' | 'active' | 'completed'
 
 function App() {
-  const [tasks, setTasks] = useState<Todo[]>([])
+  const [tasks, setTasks] = useState<Todo[]>(() => readTodos())
   const [inputValue, setInputValue] = useState('')
   const [filter, setFilter] = useState<Filter>('all')
 
   useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY)
-
-    if (!raw) {
-      return
-    }
-
-    try {
-      const parsed = JSON.parse(raw) as Todo[]
-      setTasks(parsed)
-    } catch {
-      localStorage.removeItem(STORAGE_KEY)
-    }
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
+    writeTodos(tasks)
   }, [tasks])
 
-  const activeCount = useMemo(
-    () => tasks.filter((task) => !task.completed).length,
-    [tasks],
-  )
+  const activeCount = useMemo(() => getActiveCount(tasks), [tasks])
 
-  const completedCount = useMemo(
-    () => tasks.filter((task) => task.completed).length,
-    [tasks],
-  )
+  const completedCount = useMemo(() => getCompletedCount(tasks), [tasks])
 
-  const visibleTasks = useMemo(() => {
-    if (filter === 'active') {
-      return tasks.filter((task) => !task.completed)
-    }
-
-    if (filter === 'completed') {
-      return tasks.filter((task) => task.completed)
-    }
-
-    return tasks
-  }, [filter, tasks])
+  const visibleTasks = useMemo(() => toVisibleTodos(tasks, filter), [filter, tasks])
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -66,14 +41,7 @@ function App() {
       return
     }
 
-    setTasks((prev) => [
-      {
-        id: Date.now(),
-        text: trimmed,
-        completed: false,
-      },
-      ...prev,
-    ])
+    setTasks((prev) => [createTodo(trimmed), ...prev])
     setInputValue('')
   }
 

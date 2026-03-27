@@ -197,6 +197,20 @@ h1 {
   font-size: 0.85rem;
 }
 
+.error-shell {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.error-shell p {
+  margin: 0;
+  color: #4f6260;
+}
+
 .sr-only {
   position: absolute;
   inline-size: 1px;

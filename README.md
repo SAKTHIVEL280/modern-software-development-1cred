@@ -62,6 +62,22 @@ Notes:
 - No Vercel CLI is required.
 - Every push to your selected branch will trigger a new deployment.
 
+## Production Readiness
+
+This repository now includes a production baseline:
+
+- Error boundary to avoid full-app crashes on runtime errors.
+- Validated localStorage reads/writes to protect against corrupted client data.
+- Unit tests with Vitest for core todo behavior and storage validation.
+- GitHub Actions CI pipeline running lint, test, and build on every push/PR.
+- Vercel response hardening headers configured in [vercel.json](vercel.json).
+
+Run the full quality gate locally:
+
+```sh
+npm run check
+```
+
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
 ```js
