@@ -43,6 +43,25 @@ export default defineConfig([
 ])
 ```
 
+## Deploy On Vercel (Website Dashboard)
+
+This repository is configured for Vercel with [vercel.json](vercel.json).
+
+Use these steps from the Vercel website:
+
+1. Open Vercel and click Add New Project.
+2. Import this GitHub repository.
+3. In Project Settings, set:
+   - Framework Preset: Vite
+   - Build Command: npm run build
+   - Output Directory: dist
+4. Click Deploy.
+
+Notes:
+
+- No Vercel CLI is required.
+- Every push to your selected branch will trigger a new deployment.
+
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
 ```js
